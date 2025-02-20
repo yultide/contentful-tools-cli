@@ -41,6 +41,7 @@ export async function promptContentfulToken(currentToken = '') {
 			const client = createClient(token);
 			try {
 				user = await client.getCurrentUser();
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			} catch (error) {
 				return `${chalk.red('Bad Token!')} Check your token in contentful`;
 			}
