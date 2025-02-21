@@ -11,6 +11,6 @@ export const logger = {
 		console.log(chalk.green('✔'), ...text);
 	},
 	error: (...text: unknown[]) => {
-		console.log(chalk.red('⨯ [ERROR]'), ...text);
+		console.log(chalk.red('⨯'), ...text);
 	},
 };

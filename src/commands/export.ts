@@ -18,7 +18,7 @@ export function command(program: Command): Command {
 		.option('-j, --jsonRichText', 'export richtext has raw json instead of markdown', false)
 		.description('Export contentful entries to xlsx spreadsheet')
 		.action(async (entryIds, file, options) => {
-			const client = await createClientFromConfig();
+			const { env: client } = await createClientFromConfig();
 			let ids = entryIds.split(',');
 			ids = [...new Set(ids)]; // make unique
 

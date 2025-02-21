@@ -1,5 +1,5 @@
 import { getConfig, saveConfig } from '@/utils/config';
-import { createClient } from '@/utils/contentful';
+import { createClientFromConfig } from '@/utils/contentful';
 import { logger } from '@/utils/logger';
 import chalk from 'chalk';
 import { Command } from 'commander';
@@ -16,7 +16,7 @@ export function command(program: Command): Command {
 				return;
 			}
 
-			const client = createClient(config.cmaToken);
+			const { client } = await createClientFromConfig();
 			const space = await client.getSpace(config.spaceId);
 			try {
 				await space.getEnvironment(newEnvId);

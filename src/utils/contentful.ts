@@ -26,7 +26,7 @@ export async function createClientFromConfig() {
 	const client = createClient(config.cmaToken);
 	const space = await client.getSpace(config.spaceId);
 	const env = await space.getEnvironment(config.envId);
-	return env;
+	return { client, space, env };
 }
 
 /**

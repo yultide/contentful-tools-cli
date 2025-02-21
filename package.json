@@ -42,9 +42,12 @@
 		"chalk": "^5.4.1",
 		"commander": "^13.1.0",
 		"contentful-management": "^11.47.2",
+		"diff": "^7.0.0",
 		"exceljs": "^4.4.0",
 		"figlet": "^1.5.2",
-		"ora": "^6.1.2"
+		"lodash": "^4.17.21",
+		"ora": "^6.1.2",
+		"table": "^6.9.0"
 	},
 	"publishConfig": {
 		"registry": "https://npm.pkg.github.com/"
@@ -55,7 +58,9 @@
 		"@commitlint/config-conventional": "^17.4.0",
 		"@eslint/js": "^9.20.0",
 		"@trivago/prettier-plugin-sort-imports": "^5.2.2",
+		"@types/diff": "^7.0.1",
 		"@types/figlet": "^1.5.5",
+		"@types/lodash": "^4.17.15",
 		"@types/node": "^18.11.18",
 		"@typescript-eslint/eslint-plugin": "^5.48.1",
 		"@typescript-eslint/parser": "^5.48.1",
