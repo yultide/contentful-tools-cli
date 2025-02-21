@@ -99,6 +99,9 @@ importers:
       vitest:
         specifier: ^3.0.6
         version: 3.0.6(@types/node@18.19.76)(tsx@4.19.3)
+      vitest-console:
+        specifier: ^0.2.0
+        version: 0.2.0(vitest@3.0.6(@types/node@18.19.76)(tsx@4.19.3))
 
 packages:
 
@@ -3201,6 +3204,12 @@ packages:
         optional: true
       yaml:
         optional: true
+
+  vitest-console@0.2.0:
+    resolution: {integrity: sha512-t+C7eyspNXa7LyVxkNSUMnFQrtAdL392pvanyt4IWXYZ5F9dZaOl0dANQzSDePW3mZW7OHiGD24SYzppJRERuQ==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      vitest: '>=2.0.0'
 
   vitest@3.0.6:
     resolution: {integrity: sha512-/iL1Sc5VeDZKPDe58oGK4HUFLhw6b5XdY1MYawjuSaDA4sEfYlY9HnS6aCEG26fX+MgUi7MwlduTBHHAI/OvMA==}
@@ -6389,6 +6398,10 @@ snapshots:
       '@types/node': 18.19.76
       fsevents: 2.3.3
       tsx: 4.19.3
+
+  vitest-console@0.2.0(vitest@3.0.6(@types/node@18.19.76)(tsx@4.19.3)):
+    dependencies:
+      vitest: 3.0.6(@types/node@18.19.76)(tsx@4.19.3)
 
   vitest@3.0.6(@types/node@18.19.76)(tsx@4.19.3):
     dependencies:
