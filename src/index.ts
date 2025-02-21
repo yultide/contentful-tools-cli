@@ -8,10 +8,7 @@ renderTitle();
 
 const program = new Command();
 
-program
-	.name('contentful-tools-cli')
-	.description('Contentful Tools CLI')
-	.version(packageJSON.version);
+program.name('ct').description(`Contentful Tools CLI (${packageJSON.version})`).version(packageJSON.version);
 
 addCommandHandlers(program);
 

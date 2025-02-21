@@ -19,7 +19,7 @@
 		"build": "tsup src/index.ts --format esm --clean --minify --metafile",
 		"changeset": "changeset",
 		"dev": "tsup src/index.ts --format esm --watch --clean --onSuccess \"node dist/index.js\"",
-		"prepare": "husky install",
+		"prepare": "husky",
 		"release": "changeset publish",
 		"lint": "eslint",
 		"test": "vitest",
@@ -36,13 +36,18 @@
 		]
 	},
 	"dependencies": {
+		"@contentful/rich-text-html-renderer": "^17.0.0",
+		"@contentful/rich-text-types": "^17.0.0",
 		"@inquirer/prompts": "^7.3.2",
 		"chalk": "^5.4.1",
 		"commander": "^13.1.0",
 		"contentful-management": "^11.47.2",
+		"diff": "^7.0.0",
 		"exceljs": "^4.4.0",
 		"figlet": "^1.5.2",
-		"ora": "^6.1.2"
+		"lodash": "^4.17.21",
+		"ora": "^6.1.2",
+		"table": "^6.9.0"
 	},
 	"publishConfig": {
 		"registry": "https://npm.pkg.github.com/"
@@ -51,15 +56,19 @@
 		"@changesets/cli": "^2.26.0",
 		"@commitlint/cli": "^17.4.1",
 		"@commitlint/config-conventional": "^17.4.0",
+		"@eslint/js": "^9.20.0",
 		"@trivago/prettier-plugin-sort-imports": "^5.2.2",
+		"@types/diff": "^7.0.1",
 		"@types/figlet": "^1.5.5",
+		"@types/lodash": "^4.17.15",
 		"@types/node": "^18.11.18",
 		"@typescript-eslint/eslint-plugin": "^5.48.1",
 		"@typescript-eslint/parser": "^5.48.1",
 		"@vitest/coverage-v8": "3.0.6",
-		"eslint": "^8.31.0",
+		"eslint": "^9.20.1",
 		"eslint-config-prettier": "^8.6.0",
 		"eslint-plugin-prettier": "^5.2.3",
+		"globals": "^16.0.0",
 		"husky": "^9.1.7",
 		"lint-staged": "^13.1.0",
 		"prettier": "^3.5.1",
@@ -67,7 +76,9 @@
 		"tsx": "^4.19.3",
 		"type-fest": "^3.5.1",
 		"typescript": "^4.9.4",
-		"vitest": "^3.0.6"
+		"typescript-eslint": "^8.24.1",
+		"vitest": "^3.0.6",
+		"vitest-console": "^0.2.0"
 	},
 	"engines": {
 		"node": ">=14.16"
