@@ -8,6 +8,12 @@ importers:
 
   .:
     dependencies:
+      '@contentful/rich-text-html-renderer':
+        specifier: ^17.0.0
+        version: 17.0.0
+      '@contentful/rich-text-types':
+        specifier: ^17.0.0
+        version: 17.0.0
       '@inquirer/prompts':
         specifier: ^7.3.2
         version: 7.3.2(@types/node@18.19.76)
@@ -274,8 +280,16 @@ packages:
     resolution: {integrity: sha512-PXDQXkAmiMEG162Bqdh9ChML/GJZo6vU+7F03ALKDK8zYc6SuAr47LjG7hGYRqUOz+WK0dU7bQ0xzuqFMdxzeQ==}
     engines: {node: '>=v14'}
 
+  '@contentful/rich-text-html-renderer@17.0.0':
+    resolution: {integrity: sha512-mJXZALvCbc9T4vVUN288xdWraio1n4dPZEkFbRjef3yXbVZBDALL/Ld3WY3saaNmn9AR9XOhnt4sOU8UxXy1AQ==}
+    engines: {node: '>=6.0.0'}
+
   '@contentful/rich-text-types@16.8.5':
     resolution: {integrity: sha512-q18RJuJCOuYveGiCIjE5xLCQc5lZ3L2Qgxrlg/H2YEobDFqdtmklazRi1XwEWaK3tMg6yVXBzKKkQfLB4qW14A==}
+    engines: {node: '>=6.0.0'}
+
+  '@contentful/rich-text-types@17.0.0':
+    resolution: {integrity: sha512-x50t6sILzFHBdFpAo0foJRnH8fHWyidheWhAv3uwt9aOnNqTh893gxyoc3Q0RVEZxXfHpTi+O9gmakHcdlRdTA==}
     engines: {node: '>=6.0.0'}
 
   '@cspotcode/source-map-support@0.8.1':
@@ -1716,6 +1730,9 @@ packages:
     resolution: {integrity: sha512-WUj2qlxaQtO4g6Pq5c29GTcWGDyd8itL8zTlipgECz3JesAiiOKotd8JU6otB3PACgG6xkJUyVhboMS+bje/jA==}
     engines: {node: '>=6'}
 
+  escape-html@1.0.3:
+    resolution: {integrity: sha512-NiSupZ4OeuGwr68lGIeym/ksIZMJodUGOSCZ/FSnTxcrekbvqrgdUxlJOMpijaKZVjAJrWrGs/6Jy8OMuyj9ow==}
+
   escape-string-regexp@4.0.0:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
@@ -2124,6 +2141,10 @@ packages:
   is-plain-obj@1.1.0:
     resolution: {integrity: sha512-yvkRyxmFKEOQ4pNXCmJG5AEQNlXJS5LaONXo5/cLdTZdWvsZ1ioJEonLGAosKlMWE8lwUy/bJzMjcw8az73+Fg==}
     engines: {node: '>=0.10.0'}
+
+  is-plain-obj@3.0.0:
+    resolution: {integrity: sha512-gwsOE28k+23GP1B6vFl1oVh/WOzmawBrKwo5Ev6wMKzPkaXaCDIQKzLnvsA42DRlbVTWorkgTKIviAKCWkfUwA==}
+    engines: {node: '>=10'}
 
   is-stream@2.0.1:
     resolution: {integrity: sha512-hFoiJiTl63nn+kstHGBtewWSKnQLpyb155KHheA1l39uvtO9nWIop1p3udqPcUd/xbF1VLMO4n7OI6p7RbngDg==}
@@ -3639,7 +3660,16 @@ snapshots:
     dependencies:
       chalk: 4.1.2
 
+  '@contentful/rich-text-html-renderer@17.0.0':
+    dependencies:
+      '@contentful/rich-text-types': 17.0.0
+      escape-html: 1.0.3
+
   '@contentful/rich-text-types@16.8.5': {}
+
+  '@contentful/rich-text-types@17.0.0':
+    dependencies:
+      is-plain-obj: 3.0.0
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
@@ -4971,6 +5001,8 @@ snapshots:
 
   escalade@3.2.0: {}
 
+  escape-html@1.0.3: {}
+
   escape-string-regexp@4.0.0: {}
 
   eslint-config-prettier@8.10.0(eslint@9.20.1):
@@ -5387,6 +5419,8 @@ snapshots:
   is-obj@2.0.0: {}
 
   is-plain-obj@1.1.0: {}
+
+  is-plain-obj@3.0.0: {}
 
   is-stream@2.0.1: {}
 

@@ -36,6 +36,8 @@
 		]
 	},
 	"dependencies": {
+		"@contentful/rich-text-html-renderer": "^17.0.0",
+		"@contentful/rich-text-types": "^17.0.0",
 		"@inquirer/prompts": "^7.3.2",
 		"chalk": "^5.4.1",
 		"commander": "^13.1.0",

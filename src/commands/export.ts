@@ -1,6 +1,8 @@
-import { createClientFromConfig, getContentTypes, getEntries, getFilteredFields, openFile } from '@/utils/contentful';
+import { createClientFromConfig, findAllLinkedReferences, getContentTypes, getEntries, getFilteredFields, openFile } from '@/utils/contentful';
 import allLocales from '@/utils/contentful-locales';
 import { createWorkbook, Row, saveWorkbook } from '@/utils/excel';
+import { richTextToMarkdown } from '@/utils/richtext';
+import { Document } from '@contentful/rich-text-types';
 import chalk from 'chalk';
 import { Command } from 'commander';
 import { Link } from 'contentful-management';
@@ -9,12 +11,13 @@ import path from 'node:path';
 export function command(program: Command): Command {
 	program
 		.command('export')
-		.argument('<entry-ids>', 'Comman separated entry ids')
-		.argument('[file]', 'Output XLSX filename')
+		.argument('<entry-ids>', 'comma separated entry ids')
+		.argument('[file]', 'output XLSX filename')
 		.option('-r, --recursive', 'recursively search entry', false)
+		.option('-t, --template', 'export with a template', false)
+		.option('-j, --jsonRichText', 'export richtext has raw json instead of markdown', false)
 		.description('Export contentful entries to xlsx spreadsheet')
 		.action(async (entryIds, file, options) => {
-			console.log('import', entryIds, file, options);
 			const client = await createClientFromConfig();
 			let ids = entryIds.split(',');
 			ids = [...new Set(ids)]; // make unique
@@ -22,6 +25,18 @@ export function command(program: Command): Command {
 			// fetch all the content types
 			const contentTypesList = await getContentTypes(client);
 			const contentTypes = new Map(contentTypesList.map((ct) => [ct.sys.id, ct]));
+
+			// get recursive entries
+			if (options.recursive) {
+				let allChildEntries: string[] = [];
+				let allChildAssets: string[] = [];
+				for (const entryId of ids) {
+					const childEntries = await findAllLinkedReferences(client, entryId, 0, {}, []);
+					allChildEntries = allChildEntries.concat(childEntries.entries);
+					allChildAssets = allChildAssets.concat(childEntries.assets);
+				}
+				ids = ids.concat(allChildEntries);
+			}
 
 			// download entries in chunks
 			const entries = await getEntries(client, ids);
@@ -32,7 +47,7 @@ export function command(program: Command): Command {
 				const contentType = contentTypes.get(entry.sys.contentType.sys.id);
 				const fields = getFilteredFields(contentType, []);
 
-				let id = getEntryId(entry.sys.id, false);
+				let id = getEntryId(entry.sys.id, options.template);
 				const ct = contentType?.sys.id || '';
 
 				for (const field of fields) {
@@ -49,7 +64,7 @@ export function command(program: Command): Command {
 					// clear the id to make xlsx easier to read
 					id = '';
 					for (const locale of allLocales) {
-						const value = processValue(entry.fields[field.id]?.[locale], field.type, false, false);
+						const value = processValue(entry.fields[field.id]?.[locale], field.type, options.template, options.jsonRichText);
 						if (value) {
 							row[locale] = value;
 						}
@@ -69,29 +84,10 @@ export function command(program: Command): Command {
 				}
 			}
 
-			// let saveFileName = args.file;
-			// if (saveFileName === DEFAULT_FILENAME) {
-			// 	const parts = path.parse(saveFileName);
-			// 	saveFileName = `${parts.name}-${entryIds[0] || 'noentry'}${parts.ext}`;
-			// }
-
-			// if (args.includeAssets) {
-			// 	const assetPath = `./assets-${saveFileName}`;
-			// 	mkdirp(assetPath);
-			// 	for (const assetId of assetIds) {
-			// 		const asset = await env.getAsset(assetId);
-			// 		const { url } = asset.fields.file['en-US'];
-			// 		if (url) {
-			// 			const publicUrl = url.replace('secure.ctfassets.net', 'ctfassets.net');
-			// 			const filename = `${asset.sys.id}-${path.basename(url)}`;
-			// 			const assetLoadFilepath = path.join(assetPath, filename);
-			// 			await downloadFile(publicUrl, assetLoadFilepath);
-			// 			console.log(`asset ${chalk.yellow(asset.sys.id)} ${chalk.blue(assetLoadFilepath)}`);
-			// 		}
-			// 	}
-			// }
-
-			const saveFileName = file;
+			let saveFileName = file;
+			if (!saveFileName) {
+				saveFileName = `ctt-export-${ids[0] || 'noentry'}.xlsx`;
+			}
 
 			if (rows.length) {
 				const wb = createWorkbook({ 'dm batcheditexport': rows });
@@ -114,22 +110,28 @@ export function command(program: Command): Command {
 	return program;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/**
+ * Get entry id based on template name
+ * @param entry
+ * @param useTemplate
+ * @returns
+ */
+const entryToNewId: Record<string, string> = {};
+let lastNewEntryId = 1;
 function getEntryId(entry: string, useTemplate: boolean) {
-	// if (useTemplate) {
-	// 	const e = entryToNewId[entry];
-	// 	if (e) {
-	// 		return e;
-	// 	}
-	// 	const newId = `new-${lastNewEntryId}`;
-	// 	lastNewEntryId += 1;
-	// 	entryToNewId[entry] = newId;
-	// 	return newId;
-	// }
+	if (useTemplate) {
+		const e = entryToNewId[entry];
+		if (e) {
+			return e;
+		}
+		const newId = `new-${lastNewEntryId}`;
+		lastNewEntryId += 1;
+		entryToNewId[entry] = newId;
+		return newId;
+	}
 	return entry;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function processValue(value: unknown, type: string, template: boolean, jsonRichText: boolean): string | undefined {
 	if (value === undefined || value === null) return undefined;
 
@@ -140,11 +142,10 @@ export function processValue(value: unknown, type: string, template: boolean, js
 		case 'Integer':
 			return `number:${value}`;
 		case 'RichText':
-			// if (jsonRichText) {
-			// 	return `json:${JSON.stringify(value)}`;
-			// }
-			// return `markdown:${richTextToMarkdown(value as Document)}`;
-			return `json:${JSON.stringify(value)}`;
+			if (jsonRichText) {
+				return `json:${JSON.stringify(value)}`;
+			}
+			return `markdown:${richTextToMarkdown(value as Document)}`;
 		case 'Object':
 		case 'Array': {
 			const arrayValue = value as Link<'Asset'>[];
